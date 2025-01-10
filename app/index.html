@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
+ 
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Palette App</title>
+  <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body>
+  <main>
+    <h1>Color Palette Generator</h1>
+
+    <form id="paletteForm">
+      <fieldset>
+        <legend>Create a New Palette</legend>
+
+        <label for="paletteTitle">Palette Title</label>
+        <input type="text" id="paletteTitle" required>
+
+        <label for="color1">Color 1</label>
+        <input type="color" id="color1">
+
+        <label for="color2">Color 2</label>
+        <input type="color" id="color2">
+
+        <label for="color3">Color 3</label>
+        <input type="color" id="color3">
+
+        <fieldset>
+          <legend>Temperature</legend>
+          <label for="neutral">Neutral</label>
+          <input type="radio" id="neutral" name="temperature" value="neutral" checked>
+          <label for="warm">Warm</label>
+          <input type="radio" id="warm" name="temperature" value="warm">
+          <label for="cool">Cool</label>
+          <input type="radio" id="cool" name="temperature" value="cool">
+        </fieldset>
+
+        <button type="submit">Add Palette</button>
+      </form>
+
+      <section id="palettesSection">
+        <h2>Saved Palettes</h2>
+        <ul id="palettesList"></ul>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
