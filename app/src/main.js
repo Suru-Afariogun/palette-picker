@@ -1,68 +1,22 @@
-/*
+/** @format */
+
 import "./style.css";
-import palettes from "./palettes.json";
-console.log(palettes); // It's now regular JS code!
-*/
-//
-//
-// Stay focused Suru, you got this
-//
-//
-// app/src/main.js
-import {
-  getPalettes,
-  setPalettes,
-  addPalette,
-  removePalette,
-  initPalettesIfEmpty,
-} from "./local-storage.js";
-import { createPaletteElement } from "./dom-helpers.js";
+import { getPalettes, initializePalettesIfEmpty } from "./local-storage.js";
+import { renderPalette, handleFormSubmit } from "./dom-helpers.js";
 
-document.addEventListener("DOMContentLoaded", () => {
-  initPalettesIfEmpty();
-  const palettesList = document.getElementById("palettesList");
+const main = () => {
+  // attach the form event handler to listen for the submit event
+  document.querySelector("form").addEventListener("submit", handleFormSubmit);
 
+  // the very first time the user loads this, add palattes to localStorage
+  initializePalettesIfEmpty();
   const palettes = getPalettes();
-  Object.values(palettes).forEach((palette) => {
-    const paletteElement = createPaletteElement(palette);
-    palettesList.appendChild(paletteElement);
-  });
 
-  const paletteForm = document.getElementById("paletteForm");
-  paletteForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const title = document.getElementById("paletteTitle").value;
-    const color1 = document.getElementById("color1").value;
-    const color2 = document.getElementById("color2").value;
-    const color3 = document.getElementById("color3").value;
-    const temperature = document.querySelector(
-      'input[name="temperature"]:checked'
-    ).value;
-
-    const newPalette = {
-      uuid: generateUUID(),
-      title,
-      colors: [color1, color2, color3],
-      temperature,
-    };
-
-    addPalette(newPalette);
-    const paletteElement = createPaletteElement(newPalette);
-    palettesList.appendChild(paletteElement);
-    paletteForm.reset();
-  });
-});
-
-import { v4 as generateUUID } from "uuid";
-
-const copyToClipboard = (hexCode) => {
-  navigator.clipboard.writeText(hexCode).then(() => {
-    // Modify the button's text to indicate success
-    const button = event.target;
-    button.textContent = "Copied hex!";
-    setTimeout(() => {
-      button.textContent = `Copy ${hexCode}`;
-    }, 1000);
-  });
+  // render the exisiting palettes
+  for (const palette in palettes) {
+    const { uuid: id, title, colors, temperature } = palettes[palette];
+    renderPalette(id, title, colors, temperature);
+  }
 };
+
+main();

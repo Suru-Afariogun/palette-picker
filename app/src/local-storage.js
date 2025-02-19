@@ -1,40 +1,37 @@
-// app/src/local-storage.js
-export const setLocalStorageKey = (key, value) => {
+/** @format */
+
+import startingPalettes from "./starting-palettes.json";
+
+// 1. setLocalStorageKey - a wrapper that automatically stringifies the value and sets it to the key
+const setLocalStorageKey = (key, value) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
 
-export const getLocalStorageKey = (key) => {
+// 2. getLocalStorageKey - a wrapper that retrieves the palettes from localStorage using the key wrapped in a try/catch
+const getLocalStorageKey = (key) => {
   try {
-    const storedValue = localStorage.getItem(key);
-    return storedValue ? JSON.parse(storedValue) : {};
-  } catch (error) {
-    console.error("Error reading from localStorage", error);
-    return {};
+    return JSON.parse(localStorage.getItem(key));
+  } catch (err) {
+    console.error(err);
+    return null;
   }
 };
 
-export const setPalettes = (newPalettes) => {
+export const setPalettes = (newPalettes) =>
   setLocalStorageKey("palettes", newPalettes);
-};
 
 export const getPalettes = () => {
-  return getLocalStorageKey("palettes");
+  const storedPalettes = getLocalStorageKey("palettes");
+  if (!storedPalettes) {
+    return {};
+  }
+  return storedPalettes;
 };
 
-export const initPalettesIfEmpty = () => {
-  const palettes = getPalettes();
-  if (Object.keys(palettes).length === 0) {
-    // Default palettes if empty
-    const defaultPalettes = {
-      "5affd4e4-418d-4b62-beeb-1c0f7aaff753": {
-        uuid: "5affd4e4-418d-4b62-beeb-1c0f7aaff753",
-        title: "Marcy",
-        colors: ["#c92929", "#2f5a8b", "#327a5f"],
-        temperature: "neutral",
-      },
-      // Add other default palettes...
-    };
-    setPalettes(defaultPalettes);
+export const initializePalettesIfEmpty = () => {
+  const storedPalettes = getPalettes();
+  if (!storedPalettes || Object.keys(storedPalettes).length === 0) {
+    setPalettes(startingPalettes);
   }
 };
 
@@ -44,8 +41,13 @@ export const addPalette = (newPalette) => {
   setPalettes(palettes);
 };
 
-export const removePalette = (uuid) => {
+export const deletePaletteByID = (id) => {
+  // access the palettes, deletes the palette we want to, and sets the palettes back in localStorage
   const palettes = getPalettes();
-  delete palettes[uuid];
+  delete palettes[id];
   setPalettes(palettes);
+
+  // removes palette dynamically using DOM manipulation
+  const palette = document.getElementById(id);
+  palette.remove();
 };
